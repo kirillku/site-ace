@@ -1,0 +1,16 @@
+/* CSS declarations go here */
+.hidden_div{
+	display:none;
+}
+
+.label-as-badge {
+	border-radius: 1em;
+}
+
+.website_details_page {
+	margin-left: 40px;
+}
+
+.input-group {
+	margin-bottom: 1em;
+}

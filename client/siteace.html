@@ -1,0 +1,140 @@
+<head>
+	<title>siteace</title>
+</head>
+
+<body>
+</body>
+
+<!-- TEMPLATES -->
+
+<!-- main template -->
+<template name="ApplicationLayout">
+
+	<!-- navbar -->
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">
+					<strong>Site Ace</strong> by Kirill Kubryakov
+				</a>
+				<p class="navbar-text">
+					{{> loginButtons}}
+				</p>
+			</div>
+		</div>
+	</nav>
+
+	<!-- content -->
+	<div class="container">
+		{{> yield "main"}}
+	</div>
+
+</template>
+
+<!-- template to add a new site to the list -->
+<template name="website_form">
+
+	<a class="btn btn-default js-toggle-website-form" href="#">
+			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+	</a>
+
+	<div id="website_form" class="hidden_div jumbotron">
+		<form class="js-save-website-form">
+
+			<div class="input-group">
+				<span class="input-group-addon" id="addon-url">Site address</span>
+				<input type="url" class="form-control" id="url" placeholder="http://www.mysite.com" aria-describedby="addon-url" required>
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon" id="addon-title">Title</span>
+				<input type="text" class="form-control" id="title" placeholder="Mysite" aria-describedby="addon-title" required>
+			</div>
+				<div class="input-group">
+				<span class="input-group-addon" id="addon-description">Description</span>
+				<input type="text" class="form-control" id="description" placeholder="I found this site really useful for ..." aria-describedby="addon-description" required>
+			</div>
+
+			<button type="submit" class="btn btn-info">Add</button>
+		</form>
+	</div>
+</template>
+
+<!-- template to display several website items -->
+<template name="website_list">
+
+	{{#if currentUser}}
+		{{> website_form}}
+	{{/if}}
+
+	<ol>
+	{{#each websites}}
+		<li>
+		{{>website_item}}
+		</li>
+	{{/each}}
+	</ol>
+</template>
+
+<!-- template to display single website item -->
+<template name="website_item">
+	<a href="{{url}}">{{title}}</a>
+	<p>
+		{{description}}
+	</p>
+	<p>
+		Added {{formatDate createdOn}} <a href="/website/{{_id}}"> Details </a>
+	</p>
+	{{>votes}}
+</template>
+
+<!-- template to display website rating -->
+<template name="votes">
+	<a href="#" class="btn btn-default js-upvote {{buttonUp}}">
+		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+		<span class="label label-success label-as-badge"> +{{upVote}} </span>
+	</a>
+	<a href="#" class="btn btn-default js-downvote {{buttonDown}}">
+		<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+		<span class="label label-danger label-as-badge"> -{{downVote}} </span>
+	</a>
+</template>
+
+<!-- template to display website details page -->
+<template name="website_details">
+	<a class="btn btn-default" href="/">
+			<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+	</a>
+	<div class="website_details_page">
+		<h2><a href="{{url}}">{{title}}</a></h2>
+		<p>
+			{{description}}
+		</p>
+		<p>
+			Added {{formatDate createdOn}}
+		</p>
+		{{>votes}}
+
+		<hr>
+		{{#if currentUser}}
+		<div id="comment_form">
+			<form class="js-save-comment-form">
+				<div class="input-group">
+					<input type="text" class="form-control" id="comment" placeholder="Add your comment..." required>
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default">Submit</button>
+					</span>
+				</div>
+			</form>
+		</div>
+		<br/>
+		{{/if}}
+
+		{{#each comments}}
+			<div class="well">
+			<p>
+				<strong> {{getUserName userId}}: </strong> {{text}}
+			</p>
+			</div>
+		{{/each}}
+	</div>
+</template>
